@@ -3,8 +3,8 @@ package it.uniroma3.diadia.test;
 import org.junit.jupiter.api.Test;
 
 import it.uniroma3.diadia.DiaDia;
-import it.uniroma3.diadia.IOConsole;
 import it.uniroma3.diadia.ambienti.Labirinto;
+import it.uniroma3.diadia.ioconsole.IOConsole;
 
 class LabirintoTest {
 

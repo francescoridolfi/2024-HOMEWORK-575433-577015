@@ -154,6 +154,8 @@ public class Stanza {
 		boolean trovato;
 		trovato = false;
 		for (Attrezzo attrezzo : this.attrezzi) {
+			if(attrezzo == null) continue;
+			
 			if (attrezzo.getNome().equals(nomeAttrezzo))
 				trovato = true;
 		}

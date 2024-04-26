@@ -3,9 +3,9 @@ package it.uniroma3.diadia.test;
 import org.junit.jupiter.api.Test;
 
 import it.uniroma3.diadia.DiaDia;
-import it.uniroma3.diadia.IOConsole;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 import it.uniroma3.diadia.giocatore.Giocatore;
+import it.uniroma3.diadia.ioconsole.IOConsole;
 
 class GiocatoreTest {
 
