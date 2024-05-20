@@ -4,14 +4,14 @@ import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 import it.uniroma3.diadia.giocatore.Giocatore;
-import it.uniroma3.diadia.ioconsole.IOConsole;
+import it.uniroma3.diadia.ioconsole.IO;
 
 public class ComandoPosa implements BaseComando {
 	
-	private IOConsole ioConsole;
+	private IO ioConsole;
 	private String parametro;
 	
-	public ComandoPosa(IOConsole ioConsole) {
+	public ComandoPosa(IO ioConsole) {
 		this.ioConsole = ioConsole;
 	}
 	
@@ -47,6 +47,11 @@ public class ComandoPosa implements BaseComando {
 		}
 		
 		Labirinto labirinto = partita.getLabirinto();
+		
+		if(labirinto.hasAttrezzo(parametro)) {
+			ioConsole.mostraMessaggio("Attrezzo già presente nel labirinto!");
+			return;
+		}
 		
 		if(!labirinto.getStanzaCorrente().addAttrezzo(attrezzo)) {
 			ioConsole.mostraMessaggio("Numero massimo di attrezzi per stanza raggiunto");

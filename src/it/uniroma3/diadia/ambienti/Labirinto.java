@@ -8,6 +8,7 @@ public class Labirinto {
 	//                                      0       1      2       3
 	private static String directions[] = {"nord", "sud", "est", "ovest"};
 	
+	private Stanza starting;
 	private Stanza current;
 	private Stanza ending;
 	
@@ -24,6 +25,7 @@ public class Labirinto {
 	public Labirinto(int roomsCounter) {
 		this.current = new Stanza("Atrio");
 		this.current.addAttrezzo(new Attrezzo("osso", 1));
+		this.starting = this.current;
 		this.ending = new Stanza("Biblioteca");
 		this.ending.addAttrezzo(new Attrezzo("lanterna", 3));
 		
@@ -84,6 +86,19 @@ public class Labirinto {
 		return this.ending;
 	}
 	
+	public void setStanzaVincente(Stanza stanza) {
+		this.ending = stanza;
+	}
+	
+	public Stanza getStanzaIniziale() {
+		return this.starting;
+	}
+	
+	public void setStanzaIniziale(Stanza stanza) {
+		this.starting = stanza;
+		this.current = this.starting;
+	}
+	
 	public Stanza getStanzaCorrente() {
 		return this.current;
 	}
@@ -95,6 +110,31 @@ public class Labirinto {
 	public boolean labirintoVinto() {
 		return this.current == this.ending;
 	}
+	/**
+	 * Controlla che un attrezzo sia presente all'interno delle stanze del labirinto
+	 * @param attrezzo
+	 * @return true se presente in una stanza, false se non presente in nessuna.
+	 */
+	public boolean hasAttrezzo(String nomeAttrezzo) {
+		if(this.starting.hasAttrezzo(nomeAttrezzo)) return true;
+		
+		Stanza next = this.starting.getStanzaAdiacente(this.starting.getDirezioni().get(0));
+		String direzione = this.starting.getDirezioni().get(0);
+		
+		while(next != this.getStanzaVincente()) {
+			
+			if(next.hasAttrezzo(nomeAttrezzo)) return true;
+			
+			String toAvoid = this.nextDirection(direzione);
+			direzione = next.getDirezioni().get(1);
+			
+			if(direzione == toAvoid) direzione = next.getDirezioni().get(0);
+			
+			next = next.getStanzaAdiacente(direzione);
+		}
+		
+		return next.hasAttrezzo(nomeAttrezzo);
+	}
 	
 	/**
 	 * Restituisce una coppia di stringhe casuale (due direzioni opposte tra loro)
@@ -105,5 +145,15 @@ public class Labirinto {
 		
 		
 		return new String[]{directions[index], directions[index + (index%2==0 ? 1 : -1)]};
+	}
+	
+	public String nextDirection(String direction) {
+		for(int i = 0; i < directions.length; i++) {
+			if(!directions[i].equals(direction)) continue;
+			
+			return directions[i + (i%2 == 0 ? 1 : -1)];
+		}
+		
+		return directions[0];
 	}
 }

@@ -1,14 +1,14 @@
 package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
-import it.uniroma3.diadia.ioconsole.IOConsole;
+import it.uniroma3.diadia.ioconsole.IO;
 
 public class ComandoGuarda implements BaseComando {
 
-	private IOConsole ioConsole;
+	private IO ioConsole;
 	private String parametro;
 	
-	public ComandoGuarda(IOConsole ioConsole) {
+	public ComandoGuarda(IO ioConsole) {
 		this.ioConsole = ioConsole;
 	}
 	

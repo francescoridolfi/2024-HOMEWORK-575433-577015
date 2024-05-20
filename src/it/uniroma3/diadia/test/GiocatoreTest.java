@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import it.uniroma3.diadia.DiaDia;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 import it.uniroma3.diadia.giocatore.Giocatore;
-import it.uniroma3.diadia.ioconsole.IOConsole;
+import it.uniroma3.diadia.ioconsole.IO;
 
 class GiocatoreTest {
 
@@ -14,7 +14,7 @@ class GiocatoreTest {
 	 * */
 	@Test
 	void test() {
-		IOConsole console = DiaDia.getIOConsole();
+		IO console = DiaDia.getIOConsole();
 		
 		Giocatore giocatore = new Giocatore(20);
 		console.mostraMessaggio(giocatore.toString());

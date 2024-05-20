@@ -1,16 +1,16 @@
 package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
-import it.uniroma3.diadia.ioconsole.IOConsole;
+import it.uniroma3.diadia.ioconsole.IO;
 
 public class ComandoAiuto implements BaseComando {
 
-	private IOConsole ioConsole;
+	private IO ioConsole;
 	private String parametro;
 	
 	static final private String[] elencoComandi = {"vai <nome stanza>", "aiuto", "fine", "prendi <nome attrezzo>", "posa <nome attrezzo>", "guarda"};
 	
-	public ComandoAiuto(IOConsole ioConsole) {
+	public ComandoAiuto(IO ioConsole) {
 		this.ioConsole = ioConsole;
 	}
 	

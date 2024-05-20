@@ -7,17 +7,18 @@ import it.uniroma3.diadia.DiaDia;
 import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.giocatore.Giocatore;
-import it.uniroma3.diadia.ioconsole.IOConsole;
+import it.uniroma3.diadia.ioconsole.IO;
 
 class PartitaTest {
-
+	
+	IO console = DiaDia.getIOConsole();
+	
 	/* Test 1
 	 * Abbiamo creato una partita, spostato la stanza sulla stanza
 	 * vincente e veriricato la vittoria tramite print in console 
 	 */
 	@Test
 	void testControlloVittoria() {
-		IOConsole console = DiaDia.getIOConsole();
 		
 		Partita game = new Partita();
 		Labirinto labirinto = game.getLabirinto();
@@ -39,7 +40,6 @@ class PartitaTest {
 	 */
 	@Test
 	void testCFUInsufficienti() {
-		IOConsole console = DiaDia.getIOConsole();
 		
 		Partita game = new Partita();
 		Giocatore giocatore = game.getGiocatore();
@@ -62,7 +62,6 @@ class PartitaTest {
 	 */
 	@Test
 	void testInfoStanza() {
-		IOConsole console = DiaDia.getIOConsole();
 		
 		Partita game = new Partita();
 		Labirinto labirinto = game.getLabirinto();
@@ -70,7 +69,7 @@ class PartitaTest {
 		console.mostraMessaggio("Info Stanza Corrente:");
 		console.mostraMessaggio(labirinto.getStanzaCorrente().toString());
 		
-		String direction = labirinto.getStanzaCorrente().getDirezioni()[0];
+		String direction = labirinto.getStanzaCorrente().getDirezioni().get(0);
 		labirinto.setStanzaCorrente(labirinto.getStanzaCorrente().getStanzaAdiacente(direction));
 		
 		console.mostraMessaggio("\nTi sei spostato nella Stanza Adiacente!");

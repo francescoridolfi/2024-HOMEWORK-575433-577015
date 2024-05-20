@@ -4,14 +4,14 @@ import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.giocatore.Giocatore;
-import it.uniroma3.diadia.ioconsole.IOConsole;
+import it.uniroma3.diadia.ioconsole.IO;
 
 public class ComandoVai implements BaseComando {
 	
-	private IOConsole ioConsole;
+	private IO ioConsole;
 	private String parametro;
 	
-	public ComandoVai(IOConsole ioConsole) {
+	public ComandoVai(IO ioConsole) {
 		this.ioConsole = ioConsole;
 	}
 	

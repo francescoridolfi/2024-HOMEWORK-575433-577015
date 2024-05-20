@@ -20,15 +20,23 @@ public class Partita {
 	private boolean finita;
 	
 	public Partita() {
-		this.labirinto = new Labirinto();
+		this(new Labirinto());
+	}
+	
+	public Partita(Labirinto labirinto) {
+		this.labirinto = labirinto;
 		this.giocatore = new Giocatore(CFU_INIZIALI);
-		
 		this.finita = false;
 	}
 
 	public Labirinto getLabirinto() {
 		return this.labirinto;
 	}
+	
+	public void setLabirinto(Labirinto labirinto) {
+		this.labirinto = labirinto;
+	}
+	
 	
 	public Giocatore getGiocatore() {
 		return this.giocatore;

@@ -5,19 +5,18 @@ import org.junit.jupiter.api.Test;
 import it.uniroma3.diadia.DiaDia;
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
-import it.uniroma3.diadia.ioconsole.IOConsole;
+import it.uniroma3.diadia.ioconsole.IO;
 
 
 class StanzaTest {
 	
-	
+	IO console = DiaDia.getIOConsole();
 	/* Test 1
 	 * Abbiamo creato delle stranze connesse linearmente e scritto in console
 	 * le corrispettive adiacenze
 	*/
 	@Test
 	void testStanzaAdiacenti() {
-		IOConsole console = DiaDia.getIOConsole();
 		
 		Stanza stanza1 = new Stanza("N10");
 		Stanza stanza2 = new Stanza("N11");
@@ -41,7 +40,6 @@ class StanzaTest {
 	*/
 	@Test
 	void testAttrezzi() {
-		IOConsole console = DiaDia.getIOConsole();
 		Stanza stanza = new Stanza("Stanza del Tesoro");
 		
 		stanza.addAttrezzo(new Attrezzo("ammazzaDraghi", 50));
@@ -57,7 +55,6 @@ class StanzaTest {
 	*/
 	@Test
 	void testSpostaAttrezzi() {
-		IOConsole console = DiaDia.getIOConsole();
 		Stanza stanza1 = new Stanza ("Landa degli Evocatori");
 		Stanza stanza2 = new Stanza ("Calabria Saudita");
 		Attrezzo attrezzo = new Attrezzo ("Drago di komodo", 80);
