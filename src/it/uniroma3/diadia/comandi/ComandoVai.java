@@ -1,6 +1,7 @@
 package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.ambienti.Direzione;
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.giocatore.Giocatore;
@@ -39,7 +40,7 @@ public class ComandoVai implements BaseComando {
 		Labirinto labirinto = partita.getLabirinto();
 		Giocatore giocatore = partita.getGiocatore();
 		
-		prossimaStanza = labirinto.getStanzaCorrente().getStanzaAdiacente(this.parametro);
+		prossimaStanza = labirinto.getStanzaCorrente().getStanzaAdiacente(Direzione.valueOf(this.parametro));
 		if (prossimaStanza == null)
 			ioConsole.mostraMessaggio("Direzione inesistente");
 		else {

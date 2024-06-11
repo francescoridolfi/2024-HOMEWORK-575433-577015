@@ -4,6 +4,6 @@ import it.uniroma3.diadia.ioconsole.IO;
 
 public interface FabbricaDiComandi {
 	
-	public BaseComando fabbricaComando(String istruzione, IO ioConsole);
+	public BaseComando fabbricaComando(String istruzione, IO ioConsole) throws Exception;
 	
 }

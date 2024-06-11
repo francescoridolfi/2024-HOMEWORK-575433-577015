@@ -3,6 +3,8 @@ package it.uniroma3.diadia.test;
 import org.junit.jupiter.api.Test;
 
 import it.uniroma3.diadia.DiaDia;
+import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.ambienti.Direzione;
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.ioconsole.IO;
 
@@ -15,16 +17,16 @@ class LabirintoTest {
 	void test() {
 		IO console = DiaDia.getIOConsole();
 		
-		Labirinto labirinto = new Labirinto();
+		Labirinto labirinto = new Partita().getLabirinto();
 		console.mostraMessaggio("Stanza iniziale: " + labirinto.getStanzaCorrente().getNome());
 		
-		String direzione = labirinto.getStanzaCorrente().getDirezioni().get(0);
+		Direzione direzione = labirinto.getStanzaCorrente().getDirezioni().get(0);
 		labirinto.setStanzaCorrente(labirinto.getStanzaCorrente().getStanzaAdiacente(direzione));
 		
 		console.mostraMessaggio("Ti sei spostato a " + direzione + " nella stanza: " + labirinto.getStanzaCorrente().getNome());
 		
 		while(!labirinto.labirintoVinto()) {
-			String toAvoid = labirinto.nextDirection(direzione);
+			Direzione toAvoid = Direzione.valueOf(labirinto.nextDirection(direzione.toString()));
 			
 			direzione = labirinto.getStanzaCorrente().getDirezioni().get(1);
 			if(direzione == toAvoid) direzione = labirinto.getStanzaCorrente().getDirezioni().get(0);

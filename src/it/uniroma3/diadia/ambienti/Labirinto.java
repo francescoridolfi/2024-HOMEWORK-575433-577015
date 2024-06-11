@@ -1,8 +1,14 @@
 package it.uniroma3.diadia.ambienti;
 
+import java.lang.reflect.Constructor;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
+import it.uniroma3.diadia.CaricatoreLabirinto;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import it.uniroma3.diadia.personaggi.AbstractPersonaggio;
+import it.uniroma3.diadia.personaggi.TipologiaPersonaggio;
 
 public class Labirinto {
 	//                                      0       1      2       3
@@ -12,74 +18,10 @@ public class Labirinto {
 	private Stanza current;
 	private Stanza ending;
 	
-	public Labirinto() {
-		// Se l'istanza è stata definita senza parametri, genero labirinto con solo 5 stanze random
-		this(0);
-	}
-	
-	/**
-	 * Sistema elementare per la generazione di labirinto random,
-	 * arriva fino ad un massimo di due connessioni per stanza tenendo
-	 * conto delle direzioni al retroso
-	 */
-	public Labirinto(int roomsCounter) {
-		this.current = new Stanza("Atrio");
-		this.current.addAttrezzo(new Attrezzo("osso", 1));
-		this.starting = this.current;
-		this.ending = new Stanza("Biblioteca");
-		this.ending.addAttrezzo(new Attrezzo("lanterna", 3));
-		
-		roomsCounter = (roomsCounter > 0 ? roomsCounter : 5);
-		
-		Stanza lastRoom = null;
-		String directions[] = new String[2];
-		for(int i=0; i < roomsCounter; i++) {
-			 directions = this.getRandomDirection();
-			 
-			 // Controlliamo che non siano già state inserite queste direzioni nella stanza
-			 while(true) {
-				 if(i == 0) break;
-				 
-				 if(lastRoom == null) break;
-				 
-				 if(lastRoom.hasDirezione(directions[0]) || lastRoom.hasDirezione(directions[1])) {
-					 directions = this.getRandomDirection();
-					 continue;
-				 }
-				 
-				 break;
-			 }
-			
-			// Genero nuova stanza
-			Stanza room = new Stanza("Stanza N" + (i+1));
-			if (i == 0) {
-				// Collego all'atrio se è la prima stanza
-				this.current.impostaStanzaAdiacente(directions[0], room);
-				room.impostaStanzaAdiacente(directions[1], this.current);
-			} else if(lastRoom != null) {
-				// Collego alla stanza precedente la nuova stanza
-				room.impostaStanzaAdiacente(directions[0], lastRoom);
-				lastRoom.impostaStanzaAdiacente(directions[1], room);
-			}
-			
-			lastRoom = room;
-		}
-		
-		directions = this.getRandomDirection();
-		// Controlliamo che non siano già state inserite queste direzioni nella stanza
-		while(true) {
-			if(lastRoom == null) break;
-			 
-			if(lastRoom.hasDirezione(directions[0]) || lastRoom.hasDirezione(directions[1])) {
-				directions = this.getRandomDirection();
-				continue;
-			}
-			 
-			break;
-		}
-		// concludo i collegamenti con l'ultima stanza
-		lastRoom.impostaStanzaAdiacente(directions[0], this.ending);
-		this.ending.impostaStanzaAdiacente(directions[1], lastRoom);
+	private Labirinto() {
+		this.starting = null;
+		this.current = null;
+		this.ending = null;
 	}
 	
 	public Stanza getStanzaVincente() {
@@ -119,13 +61,13 @@ public class Labirinto {
 		if(this.starting.hasAttrezzo(nomeAttrezzo)) return true;
 		
 		Stanza next = this.starting.getStanzaAdiacente(this.starting.getDirezioni().get(0));
-		String direzione = this.starting.getDirezioni().get(0);
+		Direzione direzione = this.starting.getDirezioni().get(0);
 		
 		while(next != this.getStanzaVincente()) {
 			
 			if(next.hasAttrezzo(nomeAttrezzo)) return true;
 			
-			String toAvoid = this.nextDirection(direzione);
+			Direzione toAvoid = Direzione.valueOf(this.nextDirection(direzione.toString()));
 			direzione = next.getDirezioni().get(1);
 			
 			if(direzione == toAvoid) direzione = next.getDirezioni().get(0);
@@ -156,4 +98,138 @@ public class Labirinto {
 		
 		return directions[0];
 	}
+	
+	public static LabirintoBuilder newBuilder() {
+        return new LabirintoBuilder();
+    }
+	
+	public static Labirinto fromLoader(CaricatoreLabirinto loader) {
+		Labirinto lab = new Labirinto();
+		lab.setStanzaIniziale(loader.getStanzaIniziale());
+		lab.setStanzaVincente(loader.getStanzaVincente());
+		
+		return lab;
+	}
+
+    public static class LabirintoBuilder {
+        private Stanza buffer;
+        private List<Stanza> rooms;
+        private Labirinto labirinto;
+
+        // Costruttore privato del builder
+        private LabirintoBuilder() {
+            this.labirinto = new Labirinto();
+            this.buffer = null;
+            this.rooms = new LinkedList<>();
+        }
+
+        public LabirintoBuilder addStanzaIniziale(String nome) {
+            this.buffer = new Stanza(nome);
+            this.labirinto.setStanzaIniziale(buffer);
+            this.rooms.add(buffer);
+            return this;
+        }
+
+        public LabirintoBuilder addStanzaVincente(String nome) {
+            this.buffer = new Stanza(nome);
+            this.labirinto.setStanzaVincente(buffer);
+            this.rooms.add(buffer);
+            return this;
+        }
+
+        public LabirintoBuilder addStanza(String nome) {
+            if (this.hasStanza(nome)) return this;
+            this.buffer = new Stanza(nome);
+            this.rooms.add(buffer);
+            return this;
+        }
+
+        public LabirintoBuilder addAdiacenza(String partenza, String arrivo, String direzione) {
+        	return this.addAdiacenza(partenza, arrivo, Direzione.valueOf(direzione));
+        }
+        
+        public LabirintoBuilder addAdiacenza(String partenza, String arrivo, Direzione direzione) {
+            Stanza stanzaPartenza = null, stanzaArrivo = null;
+
+            for (Stanza stanza : this.rooms) {
+                if (stanza.getNome().equals(partenza)) stanzaPartenza = stanza;
+                if (stanza.getNome().equals(arrivo)) stanzaArrivo = stanza;
+            }
+
+            if (stanzaPartenza == null || stanzaArrivo == null)
+                return this;
+
+            stanzaPartenza.impostaStanzaAdiacente(direzione, stanzaArrivo);
+            return this;
+        }
+
+        public LabirintoBuilder addAttrezzo(String nome, int peso) {
+            if (this.hasAttrezzo(nome)) return this;
+
+            Attrezzo attrezzo = new Attrezzo(nome, peso);
+            this.buffer.addAttrezzo(attrezzo);
+            return this;
+        }
+
+        public LabirintoBuilder addAttrezzo(Attrezzo attrezzo) {
+            if (this.hasAttrezzo(attrezzo.getNome())) return this;
+
+            this.buffer.addAttrezzo(attrezzo);
+            return this;
+        }
+
+        public LabirintoBuilder setPersonaggio(TipologiaPersonaggio tipologia, String nome) {
+            if (this.buffer.getPersonaggio() != null) return this;
+
+            Class<?> absClass = tipologia.getAbstractClass();
+            if (absClass == null) return this;
+
+            Constructor<?> constructor;
+
+            try {
+                constructor = absClass.getConstructor(String.class);
+            } catch (Exception e) {
+                return this;
+            }
+
+            AbstractPersonaggio personaggio;
+
+            try {
+                personaggio = (AbstractPersonaggio) constructor.newInstance(nome);
+            } catch (Exception e) {
+                return this;
+            }
+
+            this.buffer.setPersonaggio(personaggio);
+            return this;
+        }
+
+        public LabirintoBuilder setPersonaggio(AbstractPersonaggio personaggio) {
+            if (this.buffer.getPersonaggio() != null) return this;
+
+            this.buffer.setPersonaggio(personaggio);
+            return this;
+        }
+
+        public boolean hasAttrezzo(String nomeAttrezzo) {
+            for (Stanza s : this.rooms) {
+                if (s.hasAttrezzo(nomeAttrezzo)) return true;
+            }
+            return false;
+        }
+
+        public Labirinto getLabirinto() {
+            return this.labirinto;
+        }
+
+        public List<Stanza> getListaStanze() {
+            return this.rooms;
+        }
+
+        public boolean hasStanza(String nome) {
+            for (Stanza s : this.getListaStanze())
+                if (s.getNome().equals(nome)) return true;
+            return false;
+        }
+    }
 }

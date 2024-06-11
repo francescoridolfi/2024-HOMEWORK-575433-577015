@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import it.uniroma3.diadia.DiaDia;
 import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.ambienti.Direzione;
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.giocatore.Giocatore;
 import it.uniroma3.diadia.ioconsole.IO;
@@ -69,7 +70,7 @@ class PartitaTest {
 		console.mostraMessaggio("Info Stanza Corrente:");
 		console.mostraMessaggio(labirinto.getStanzaCorrente().toString());
 		
-		String direction = labirinto.getStanzaCorrente().getDirezioni().get(0);
+		Direzione direction = labirinto.getStanzaCorrente().getDirezioni().get(0);
 		labirinto.setStanzaCorrente(labirinto.getStanzaCorrente().getStanzaAdiacente(direction));
 		
 		console.mostraMessaggio("\nTi sei spostato nella Stanza Adiacente!");

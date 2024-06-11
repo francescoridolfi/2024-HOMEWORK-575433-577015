@@ -10,6 +10,11 @@ public class Giocatore {
 		this.borsa = new Borsa();
 	}
 	
+	public Giocatore(int cfu, int pesoMaxBorsa) {
+		this.cfu = cfu;
+		this.borsa = new Borsa(pesoMaxBorsa);
+	}
+	
 	public int getCFU() {
 		return this.cfu;
 	}

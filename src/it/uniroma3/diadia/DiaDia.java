@@ -1,12 +1,17 @@
 package it.uniroma3.diadia;
 
 
+import java.io.FileNotFoundException;
+
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.comandi.BaseComando;
+import it.uniroma3.diadia.comandi.ComandoNonValido;
 import it.uniroma3.diadia.comandi.FabbricaDiComandi;
-import it.uniroma3.diadia.comandi.FabbricaDiComandiFisarmonica;
+import it.uniroma3.diadia.comandi.FabbricaDiComandiRiflessiva;
 import it.uniroma3.diadia.ioconsole.IO;
 import it.uniroma3.diadia.ioconsole.IOConsole;
+import it.uniroma3.diadia.personaggi.Mago;
+import it.uniroma3.diadia.personaggi.TipologiaPersonaggio;
 
 /**
  * Classe principale di diadia, un semplice gioco di ruolo ambientato al dia.
@@ -42,7 +47,7 @@ public class DiaDia {
 	}
 	
 	public DiaDia(Labirinto labirinto, IO io) {
-		this.partita = new Partita(labirinto);
+		this.partita = new Partita(labirinto, PropertiesLoader.getCFU(), PropertiesLoader.getPesoMaxBorsa());
 		ioConsole = io;
 	}
 
@@ -66,9 +71,13 @@ public class DiaDia {
 	private boolean processaIstruzione(String istruzione) {
 		BaseComando comandoDaEseguire;
 		
-		FabbricaDiComandi fabbrica = new FabbricaDiComandiFisarmonica();
+		FabbricaDiComandi fabbrica = new FabbricaDiComandiRiflessiva();
 		
-		comandoDaEseguire = fabbrica.fabbricaComando(istruzione, ioConsole);
+		try {
+			comandoDaEseguire = fabbrica.fabbricaComando(istruzione, ioConsole);
+		} catch (Exception e) {
+			comandoDaEseguire = new ComandoNonValido(ioConsole);
+		}
 		
 		comandoDaEseguire.esegui(partita);
 	
@@ -88,7 +97,35 @@ public class DiaDia {
 	}
 
 	public static void main(String[] argc) {
-		DiaDia gioco = new DiaDia();
+		
+		Labirinto test = Labirinto.newBuilder()
+				.addStanzaIniziale("Atrio")
+				.addAttrezzo("osso", 10)
+				.setPersonaggio(TipologiaPersonaggio.CANE, "Dexter")
+				.addStanza("n10")
+				.setPersonaggio(TipologiaPersonaggio.STREGA, "Daniele Panzeri")
+				.addAdiacenza("Atrio", "n10", "nord")
+				.addStanza("n11")
+				.setPersonaggio(new Mago("Professore"))
+				.addAdiacenza("n10", "n11", "ovest")
+				.addStanzaVincente("n12")
+				.addAdiacenza("n11", "n12", "est")
+				.getLabirinto();
+		
+		CaricatoreLabirinto loader;
+		try {
+			loader = new CaricatoreLabirinto("Labirinto.txt");
+			loader.carica();
+		} catch (FileNotFoundException | FormatoFileNonValidoException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		
+		Labirinto caricato = Labirinto.fromLoader(loader);
+		
+		
+		DiaDia gioco = new DiaDia(test, new IOConsole());
 		gioco.gioca();
 	}
 }

@@ -3,6 +3,7 @@ package it.uniroma3.diadia.test;
 import org.junit.jupiter.api.Test;
 
 import it.uniroma3.diadia.DiaDia;
+import it.uniroma3.diadia.ambienti.Direzione;
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 import it.uniroma3.diadia.ioconsole.IO;
@@ -22,14 +23,14 @@ class StanzaTest {
 		Stanza stanza2 = new Stanza("N11");
 		Stanza stanza3 = new Stanza("N12");
 		
-		stanza1.impostaStanzaAdiacente("sinistra",stanza2);
-		stanza2.impostaStanzaAdiacente("destra",stanza1);
-		stanza2.impostaStanzaAdiacente("sinistra",stanza3);
-		stanza3.impostaStanzaAdiacente("destra",stanza2);
+		stanza1.impostaStanzaAdiacente(Direzione.sud,stanza2);
+		stanza2.impostaStanzaAdiacente(Direzione.nord,stanza1);
+		stanza2.impostaStanzaAdiacente(Direzione.sud,stanza3);
+		stanza3.impostaStanzaAdiacente(Direzione.nord,stanza2);
 		
-		console.mostraMessaggio(stanza1.getNome() +" confina a sinistra con: " + stanza1.getStanzaAdiacente("sinistra").getNome());
-		console.mostraMessaggio(stanza2.getNome() +" confina a sinistra con: " + stanza2.getStanzaAdiacente("sinistra").getNome());
-		console.mostraMessaggio(stanza3.getNome() +" confina a destra con: " + stanza3.getStanzaAdiacente("destra").getNome());
+		console.mostraMessaggio(stanza1.getNome() +" confina a sud con: " + stanza1.getStanzaAdiacente(Direzione.sud).getNome());
+		console.mostraMessaggio(stanza2.getNome() +" confina a sud con: " + stanza2.getStanzaAdiacente(Direzione.sud).getNome());
+		console.mostraMessaggio(stanza3.getNome() +" confina a nord con: " + stanza3.getStanzaAdiacente(Direzione.nord).getNome());
 		console.mostraMessaggio("-------------------");
 	}
 	

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import it.uniroma3.diadia.personaggi.AbstractPersonaggio;
 
 public class StanzaProtected {
 	static final protected int NUMERO_MASSIMO_DIREZIONI = 4;
@@ -15,6 +16,7 @@ public class StanzaProtected {
 	protected List<Attrezzo> attrezzi;
 	protected Map<String, Stanza> stanzeAdiacenti;
 	protected String[] direzioni;
+	protected AbstractPersonaggio personaggio;
     
     /**
      * Crea una stanza. Non ci sono stanze adiacenti, non ci sono attrezzi.
@@ -25,6 +27,14 @@ public class StanzaProtected {
         this.stanzeAdiacenti = new HashMap<String, Stanza>();
 
         this.attrezzi = new ArrayList<Attrezzo>();
+    }
+    
+    public void setPersonaggio(AbstractPersonaggio personaggio) {
+    	this.personaggio = personaggio;
+    }
+    
+    public AbstractPersonaggio getPersonaggio() {
+    	return this.personaggio;
     }
 
     /**
@@ -125,6 +135,9 @@ public class StanzaProtected {
     	if(!has_items) {
     		risultato.append("Nessun Attrezzo Trovato");
     	}
+    	
+    	risultato.append("\nPersonaggio nella stanza: ");
+    	risultato.append((this.getPersonaggio() != null) ? this.getPersonaggio().getNome() : null);
     	return risultato.toString();
     }
 

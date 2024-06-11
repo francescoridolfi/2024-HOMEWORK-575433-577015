@@ -1,6 +1,7 @@
 package it.uniroma3.diadia.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -15,10 +16,14 @@ public class FabbricaDiComandiFisarmonicaTest {
 	public void testFabbricaComando() {
 		IOConsole ioConsole = new IOConsole();
 		
-		BaseComando comandoDaEseguire;
+		BaseComando comandoDaEseguire = null;
 		FabbricaDiComandi factory = new FabbricaDiComandiFisarmonica();
 		
-		comandoDaEseguire = factory.fabbricaComando("prendi osso", ioConsole);
+		try {
+			comandoDaEseguire = factory.fabbricaComando("prendi osso", ioConsole);
+		} catch (Exception e) {
+			fail(e.toString());
+		}
 		
 		assertEquals("prendi", comandoDaEseguire.getNome());
 	}

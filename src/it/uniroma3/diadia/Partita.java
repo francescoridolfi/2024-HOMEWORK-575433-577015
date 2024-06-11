@@ -1,4 +1,5 @@
 package it.uniroma3.diadia;
+import it.uniroma3.diadia.ambienti.Direzione;
 import it.uniroma3.diadia.ambienti.Labirinto;
 import it.uniroma3.diadia.ambienti.Stanza;
 import it.uniroma3.diadia.giocatore.Giocatore;
@@ -20,12 +21,18 @@ public class Partita {
 	private boolean finita;
 	
 	public Partita() {
-		this(new Labirinto());
+		this(Labirinto.newBuilder().addStanzaIniziale("n10").addStanzaVincente("n11").addAdiacenza("n10", "n11", Direzione.nord).getLabirinto());
 	}
 	
 	public Partita(Labirinto labirinto) {
 		this.labirinto = labirinto;
 		this.giocatore = new Giocatore(CFU_INIZIALI);
+		this.finita = false;
+	}
+	
+	public Partita(Labirinto labirinto, int cfu, int pesoMaxBorsa) {
+		this.labirinto = labirinto;
+		this.giocatore = new Giocatore(cfu, pesoMaxBorsa);
 		this.finita = false;
 	}
 
